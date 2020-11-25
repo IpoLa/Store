@@ -19,7 +19,9 @@ def product__detail__view(request, pk):
     # except:
     #     raise Http404
 
-    return HttpResponse(f"Product id {obj.id}")
+    # return HttpResponse(f"Product id {obj.id}")
+    # return render(request, "products/product_detail.html", {"object": obj})
+    return render(request, "products/detail.html", {"object": obj})
 
 def product__api__detail__view(request, pk, *args, **kwargs):
     try:
@@ -27,3 +29,24 @@ def product__api__detail__view(request, pk, *args, **kwargs):
     except Product.DoesNotExist:
         return JsonResponse({"message": "Not Found"}, status=404) 
     return JsonResponse({"id ": obj.id})
+
+def search__view(request, *args, **kwargs):
+    query = request.GET.get('q')
+    qs = Product.objects.filter(title__icontains=query[0])
+    print(query, qs)
+    context = {"home": "abc", "query": query}
+    return render(request, "home.html", context)
+
+def product__create__view(request, *args, **kwargs):
+    # print(request.POST)
+    # print(request.GET)
+    if request.method == "POST":
+        post_data = request.POST or None
+        if post_data != None:
+            print("post_data ", post_data)
+    return render(request, "forms.html", {})
+
+def product__list__view(request, *args, **kwargs):
+    qs = Product.objects.all()
+    context = {"object_list": qs}
+    return render(request, "products/list.html", context)
