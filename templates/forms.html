@@ -4,7 +4,7 @@
 {% block content %}
 
 <form method='POST' action="."> {% csrf_token %}
-    <input type='text' name='something' />
+    {{ form.as_p }}
     <button type='submit'>Send data</button>
 </form>
 
