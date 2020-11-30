@@ -55,7 +55,7 @@ def search__view(request, *args, **kwargs):
 #                 # print("post_data ", post_data)
 #     return render(request, "forms.html", {})
 
-@staff_member_required
+@login_required   # Can use this @staff_member_required to select permissions
 def product__create__view(request, *args, **kwargs):
     form = ProductModelForm(request.POST or None)
     if form.is_valid():

@@ -49,17 +49,18 @@ class LoginForm(forms.Form):
 
 
     # def clean(self):
-    #     username = self.cleaned_data.get("username")
-    #     password = self.cleaned_data.get("password")
+    #     data = super().clean()
+    #     username = data.get("username")
+    #     password = data.get("password")
 
 
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
         qs = User.objects.filter(username__iexact = username)
-        if username in non_allowed_username:
-            raise forms.ValidationError("This is an invalid user.")
         if not qs.exists():
+            raise forms.ValidationError("This is an invalid user.")
+        if qs.count() != 1:
             raise forms.ValidationError("This is an invalid user.")
         return username
 
