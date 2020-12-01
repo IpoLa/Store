@@ -1,5 +1,6 @@
 from django import forms
 from .models import Order
+from products.models import Product
 
 class OrderForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -17,6 +18,6 @@ class OrderForm(forms.ModelForm):
         cleaned_data = super().clean(*args, **kwargs)
         # Check product inventory 
         if self.product != None:
-            if self.product.has_inventory():
+            if not self.product.has_inventory():
                 raise forms.ValidationError("This product is out of inventory.")
         return cleaned_data
