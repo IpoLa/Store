@@ -12,6 +12,9 @@ from products.views import (
     product__api__detail__view,
     product__list__view,
 )
+from orders.views import (
+    order_checkout_view,
+)
 
 from django.views.generic import TemplateView
 urlpatterns = [
@@ -20,6 +23,7 @@ urlpatterns = [
     path('logout/', logout_view),
     path('register/', register_view),
     path('', TemplateView.as_view(template_name='base.html')),
+    path('checkout/', order_checkout_view),
     path('', home__view),
     path('products/', product__list__view),
     path('products/create/', product__create__view),
