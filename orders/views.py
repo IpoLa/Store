@@ -1,20 +1,28 @@
 import pathlib
 from wsgiref.util import FileWrapper
 from mimetypes import guess_type
+
 from django.shortcuts import render, redirect
 from .models import Order
 from products.models import Product
+
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .forms import OrderForm
 
 # Create your views here.
 @login_required
 def order_checkout_view(request):
-    qs = Product.objects.filter(featured=True)
-    if not qs.exists():
+    product_id = request.session.get("product_id") or None
+    if product_id == None:
         return redirect("/")
-    product = qs.first()
+    product = None
+    try:
+        product = Product.objects.get(id=product_id)
+    except:
+        #  I can do messages.success() later
+        return redirect("/")
+
     # if not product.has_inventory():
     #     return redirect("/no-inventory")
     user = request.user  # Anon user
@@ -41,9 +49,10 @@ def order_checkout_view(request):
         order_obj.save()
         del request.session['order_id']
         return redirect("/success")
-    return render(request, 'orders/checkout.html', {"form": form, "object": order_obj})
+    return render(request, 'orders/checkout.html', 
+    {"form": form, "object": order_obj, "is_digital": product.is_digital})
 
-def download_order(request, *arg, **kwargs):
+def download_order(request, *args, **kwargs):
     '''
         Download our product media,
         if it exists.

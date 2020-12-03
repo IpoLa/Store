@@ -13,6 +13,7 @@ from products.views import (
     product__detail__view,
     product__api__detail__view,
     product__list__view,
+    featured_product_view
 )
 from orders.views import (
     order_checkout_view,
@@ -28,7 +29,8 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='base.html')),
     path('checkout/', order_checkout_view),
     path('download/', download_order),
-    path('', home__view),
+    path('featured/', featured_product_view),
+    # path('', home__view),
     path('products/', product__list__view),
     path('products/create/', product__create__view),
     path('products/<int:pk>/', product__detail__view),
