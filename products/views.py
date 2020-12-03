@@ -57,9 +57,18 @@ def search__view(request, *args, **kwargs):
 
 @staff_member_required   # Can use this @staff_member_required to select permissions
 def product__create__view(request, *args, **kwargs):
-    form = ProductModelForm(request.POST or None)
+    form = ProductModelForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         obj = form.save(commit=False)
+        # Product image/video
+        image = request.FILES.get('image')
+        media = request.FILES.get('media')
+        # Do some stuff
+        if image:
+            obj.image = image
+        if media:
+            obj.media = media
+
         obj.user = request.user
         obj.save()
         # print(form.cleaned_data)

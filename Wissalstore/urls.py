@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, re_path
+from django.conf.urls.static import static
 from accounts.views import (
     login_view,
     logout_view,
@@ -31,3 +33,7 @@ urlpatterns = [
     # path('api/products/<int:id>/', product__api__detail__view),
     re_path(r'api/products/(?P<pk>\d+)/', product__api__detail__view),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
