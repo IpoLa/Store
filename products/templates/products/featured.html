@@ -8,7 +8,7 @@
         <p>{{ product.content }}</p>
         <a href="/checkout">${{ product.price }} Purchase</a>
 {% else %}
-        {{ form.as_p }}
+        {% include 'snippets/form.html' with form=form submit_btn='Add to waitlist' %}
 
 {% endif %}
 {% endblock content %}
