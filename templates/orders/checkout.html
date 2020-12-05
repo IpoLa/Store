@@ -2,13 +2,6 @@
 
 
 {% block content %}
-
-<form method='POST' action="."> {% csrf_token %}
-    {{ form.as_p }}
-
-
-    <button type='submit'>Complete Order</button>
-</form>
   
     <p>
         <b>Subtotal</b> {{ object.subtotal }}
