@@ -1,0 +1,17 @@
+<h1>{{ product.title }}</h1>
+
+{% if product.image %}
+    <img src='{{ product.image.url }}' />
+{% endif %}
+
+{% if product.content %}
+    <p>{{ product.content }}</p>
+{% endif %}
+
+{% if show_price %}
+    <p>${{ product.price }}</p>
+{% endif %}
+
+{% if show_inventory %}
+    <p>{{ product.inventory }}</p>
+{% endif %}

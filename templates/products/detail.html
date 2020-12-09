@@ -6,12 +6,14 @@
 
 {% block content %}
 
-<h1>{{object.title}}</h1>
+    {% include "products/snippets/product_detail.html" with product=object %}
 
-{% if request.path == "/" %}
-    <h3>Welcome to description</h3>
-{% else %}
-    {% include "products/detail_snippet.html" with product=object %}
-{% endif %}
+    {% if can_order %}
+        <a href="/checkout">${{ product.price }} Purchase</a>  
+    {% else %}
+        {% if form %}
+            {% include 'snippets/form.html' with form=form submit_btn='Add to waitlist' %}
+        {% endif %}
+    {% endif %}
 
 {% endblock content %}

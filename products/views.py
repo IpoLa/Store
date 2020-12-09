@@ -34,7 +34,7 @@ def featured_product_view(request, *args, **kwargs):
         "can_order": can_order,
         # "has_inventory": product.has_inventory()
     }
-    return render(request, "products/featured.html", context)
+    return render(request, "products/detail.html", context)
 
 def home__view(request, *args, **kwargs):
     context = {"name": "Akram"}
