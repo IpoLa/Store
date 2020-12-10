@@ -17,6 +17,7 @@ class Product(models.Model):
     title = models.CharField(max_length=220)
     content = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
+    video_link = models.TextField(blank=True, null=True)
     media = models.FileField(storage=ProtectedStorage, upload_to='products/', null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     inventory = models.IntegerField(default=0)
