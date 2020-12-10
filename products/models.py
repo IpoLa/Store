@@ -36,6 +36,14 @@ class Product(models.Model):
             return True
         return False
 
+    @property
+    def order_btn_title(self):
+        if self.can_order and not self.has_inventory():
+            return "Backorder"
+        if not self.can_order:
+            return "Cannot purchase"
+        return "Purchase"
+
     def has_inventory(self):
         return self.inventory > 0  # True or False
     

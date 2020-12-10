@@ -9,7 +9,7 @@
     {% include "products/snippets/product_detail.html" with product=object %}
 
     {% if can_order %}
-        <a href="/checkout">${{ product.price }} Purchase</a>  
+        <a href="/checkout">${{ object.price }} {{ object.order_btn_title }}</a>
     {% else %}
         {% if form %}
             {% include 'snippets/form.html' with form=form submit_btn='Add to waitlist' %}
