@@ -14,7 +14,7 @@
 {% endif %}
 
 {% if product.content %}
-    <p>{{ product.content }}</p>
+    <p>{{ product.content|safe|escape }}</p>
 {% endif %}
 
 {% if show_price %}

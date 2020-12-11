@@ -9,9 +9,9 @@ Products - {{ block.super }}
 
 {% for object in object_list %}
     <div>
-        {{ object.title }}
+        {% comment %} {{ object.title }} {% endcomment %}
 
-        {% include "products/detail_snippet.html" with product=object %}
+        {% include "products/detail.html" with product=object %}
     </div>
 {% endfor %}
 
