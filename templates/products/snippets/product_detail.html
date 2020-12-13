@@ -13,8 +13,8 @@
     </iframe>
 {% endif %}
 
-{% if product.content %}
-    <p>{{ product.content|safe|escape }}</p>
+{% if show_content %}
+    {% include 'products/snippets/product_content.html' with product=product %}
 {% endif %}
 
 {% if show_price %}

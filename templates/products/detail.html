@@ -7,9 +7,17 @@
 {% block content %}
     <div class="row">
         <div class="col">
+            
             {% include "products/snippets/product_detail.html" with product=object %}
+
+            <div class="col d-block d-md-none"
+                {% include "products/snippets/order_btn.html" with product=object can_order=can_order form=form %}
+            </div>
+
+            {% include "products/snippets/product_content.html" with product=product %}
         </div>
-        <div class="col">
+
+        <div class="col d-md-block d-none">
             {% include "products/snippets/order_btn.html" with product=object can_order=can_order form=form %}
         </div>
     </div>
