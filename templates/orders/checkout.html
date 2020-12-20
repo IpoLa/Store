@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-  
-    <p>
-        <b>Subtotal</b> {{ object.subtotal }}
-    </p>
-    <p>
-        <b>Tax</b> {{ object.tax }}
-    </p>  
-    <p>
-        <b>Total</b> {{ object.total }}
-    </p>
-
-    {% include 'snippets/form.html' with form=form submit_btn='Complete order' %}
-
+<div class="row">
+    <div class="col-md-3 order-md-2">
+        <p>
+            <b>Product</b>: {{ object.product.content }}
+        </p>
+        <p>
+            <b>Subtotal</b> {{ object.subtotal }}
+        </p>
+        <p>
+            <b>Tax</b> {{ object.tax }}
+        </p>  
+        <p>
+            <b>Total</b> {{ object.total }}
+        </p>
+    </div>
+    <div class="col-md-9">
+        <h3>{{ object.product.title }} <small>{{ object.product.price }}</small></h3>
+        {% include 'snippets/form.html' with form=form submit_btn='Complete order' %}
+    </div>
+</div>
 {% endblock %}
