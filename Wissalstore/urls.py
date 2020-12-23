@@ -31,7 +31,7 @@ urlpatterns = [
     path('checkout/', order_checkout_view),
     path('success/', my_orders_view),
     path('orders/', my_orders_view),
-    path('download/', download_order),
+    path('orders/<int:order_id>/download/', download_order),
     path('featured/', featured_product_view),
     # path('', home__view),
     path('products/', product__list__view),

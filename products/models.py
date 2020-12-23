@@ -24,10 +24,7 @@ class Product(models.Model):
     featured = models.BooleanField(default=False)
     can_backorder = models.BooleanField(default=False)
     requires_shipping = models.BooleanField(default=False)
-
-    @property
-    def is_digital(self):
-        return self.media != None or self.media != ""
+    is_digital = models.BooleanField(default=False)
 
     # @property
     # def requires_shipping(self):

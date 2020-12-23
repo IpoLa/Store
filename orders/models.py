@@ -28,6 +28,20 @@ class Order(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)   # Automatically datetime object
     inventory_updated = models.BooleanField(default=False)
 
+    def get_absolute_url(self):
+        return f"/orders/{self.pk}"
+
+    def get_download_url(self):
+        return f"/orders/{self.pk}/download/"
+
+    @property
+    def is_downloadable(self):
+        if not self.product:
+            return False
+        if self.product.is_digital:
+            return True
+        return False
+
     def mark_paid(self, custome_amount=None, save=False):
         paid_amount = self.total
         if custome_amount != None:

@@ -58,16 +58,22 @@ def order_checkout_view(request):
     return render(request, 'orders/checkout.html', 
     {"form": form, "object": order_obj, "is_digital": product.is_digital})
 
-def download_order(request, *args, **kwargs):
+@login_required
+def download_order(request, order_id=None, *args, **kwargs):
     '''
         Download our product media,
         if it exists.
     '''
-    order_id = 'abc'
+    if order_id == None:
+        return redirect("/orders")
+    qs = Order.objects.filter(id=order_id, user=request.user, status='paid', product__media__isnull=False)
+    if not qs.exists():
+        return redirect("/orders")
     qs = Product.objects.filter(media__isnull=False)
-    product_obj = qs.first()
+    order_obj = qs.first()
+    product_obj = order_obj.product
     if not product_obj.media:
-        raise Http404
+        return redirect("/orders")
     media = product_obj.media
     product_path = media.path
     path = pathlib.Path(product_path)
