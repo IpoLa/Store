@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for object in object_list %}
+<li>{{ object.product.title }} - {{ object.total }} </li>
+{% endfor %}
+
+{% endblock %}

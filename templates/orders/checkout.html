@@ -18,7 +18,7 @@
     </div>
     <div class="col-md-9">
         <h3>{{ object.product.title }} <small>{{ object.product.price }}</small></h3>
-        {% include 'snippets/form.html' with form=form submit_btn='Complete order' %}
+        {% include 'snippets/form.html' with form=form submit_btn='Complete order' btn_class='btn btn-primary'%}
     </div>
 </div>
 {% endblock %}

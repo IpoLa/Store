@@ -12,6 +12,11 @@ from .forms import OrderForm
 
 # Create your views here.
 @login_required
+def my_orders_view(request):
+    qs = Order.objects.filter(user=request.user, status='paid')
+    return render(request, "orders/my_orders.html", {'object_list': qs})
+
+@login_required
 def order_checkout_view(request):
     product_id = request.session.get("product_id") or None
     if product_id == None:
@@ -48,6 +53,7 @@ def order_checkout_view(request):
         order_obj.mark_paid(save=False)
         order_obj.save()
         del request.session['order_id']
+        request.session['checkout_success_order_id'] = order_obj.id
         return redirect("/success")
     return render(request, 'orders/checkout.html', 
     {"form": form, "object": order_obj, "is_digital": product.is_digital})
