@@ -6,8 +6,20 @@ User = get_user_model()
 non_allowed_username = ['abc']
 
 class RegisterForm(forms.Form):
-    username = forms.CharField()
-    email = forms.EmailField()
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control"
+            }
+        )
+    )
+    email = forms.EmailField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control"
+            }
+        )
+    )
     password1 = forms.CharField(
         label = 'Password',
         widget = forms.PasswordInput(
@@ -37,7 +49,13 @@ class RegisterForm(forms.Form):
         return username
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control"
+            }
+        )
+    )
     password = forms.CharField(
         widget = forms.PasswordInput(
             attrs = {

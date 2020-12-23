@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {% if object.product.requires_shipping %}
+        <style>
+            .shipping-address-class {
+                display: None !important;
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-md-3 order-md-2">
