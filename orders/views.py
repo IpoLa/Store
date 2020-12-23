@@ -18,6 +18,7 @@ def my_orders_view(request):
 
 @login_required
 def order_checkout_view(request):
+    # cc_token = from_our_cc_proccessor()
     product_id = request.session.get("product_id") or None
     if product_id == None:
         return redirect("/")
