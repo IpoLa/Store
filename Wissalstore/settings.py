@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'profiles',
     'products',
     'emails',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

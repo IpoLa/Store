@@ -2,9 +2,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
+
 from .models import Product
 from .forms import ProductModelForm
 from emails.forms import InventoryWaitlistForm
+
+from .serializer import ProductSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 
 # Create your views here.
 
@@ -84,8 +90,20 @@ def search__view(request, *args, **kwargs):
 #                 # print("post_data ", post_data)
 #     return render(request, "forms.html", {})
 
-@staff_member_required   # Can use this @staff_member_required to select permissions
+#  TRY REST FRAMEROWK
+@api_view(['POST'])  # http method the clint == POST
 def product__create__view(request, *args, **kwargs):
+    serializer = ProductSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
+        obj = serializer.save(user=request.user)
+        return Response(serializer.data, status=201)
+    return Response({}, status=400)
+
+@staff_member_required   # Can use this @staff_member_required to select permissions
+def product__create__view_pure_django(request, *args, **kwargs):
+    '''
+    REST API Create View
+    '''
     form = ProductModelForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         obj = form.save(commit=False)

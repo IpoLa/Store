@@ -56,3 +56,20 @@ class Product(models.Model):
         if save == True:
             self.save()
         return self.inventory
+
+    '''
+    Feel free to delete this class
+    '''
+    class Meta:
+        ordering = ['-id']
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "image": self.image,
+            "media": self.media,
+            "price": self.price,
+        }
