@@ -3,13 +3,19 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-from .models import Product
+from .models import Product, ProductLike
 from .forms import ProductModelForm
 from emails.forms import InventoryWaitlistForm
 
-from .serializer import ProductSerializer
+from .serializer import (
+    ProductSerializer, 
+    ProductActionSerializer, 
+    ProductCreateSerializer
+)
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
 
 
 # Create your views here.
@@ -46,7 +52,7 @@ def home__view(request, *args, **kwargs):
     context = {"name": "Akram"}
     return render(request, "home.html", context)
  
-def product__detail__view(request, pk):
+def product__detail__view_pure_django(request, pk):
     try: 
         obj = Product.objects.get(pk=pk)
     except Product.DoesNotExist:
@@ -90,14 +96,79 @@ def search__view(request, *args, **kwargs):
 #                 # print("post_data ", post_data)
 #     return render(request, "forms.html", {})
 
+
+
+
 #  TRY REST FRAMEROWK
-@api_view(['POST'])  # http method the clint == POST
+@api_view(['POST'])  # http method the client == POST
+# @authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def product__create__view(request, *args, **kwargs):
-    serializer = ProductSerializer(data=request.POST)
-    if serializer.is_valid(raise_exception=True):
-        obj = serializer.save(user=request.user)
+    serializer = ProductCreateSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=False):
+        serializer.save(user=request.user)
         return Response(serializer.data, status=201)
     return Response({}, status=400)
+
+@api_view(['GET'])
+def product__list__view(request, *args, **kwargs):
+    qs = Product.objects.all()
+    serializer = ProductSerializer(qs, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def product__detail__view(request, id, *args, **kwargs):
+    qs = Product.objects.filter(id=id)
+    if not qs.exists():
+        return Response({}, status=404)
+    obj = qs.first()
+    serializer = ProductSerializer(obj)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def product__delete__view(request, id, *args, **kwargs):
+    qs = Product.objects.filter(id=id)
+    if not qs.exists():
+        return Response({}, status=404)
+    qs = qs.filter(user=request.user)
+    if not qs.exists():
+        return Response({"message": "You cannot delete this product."}, status=401)
+    obj = qs.first()
+    obj.delete()
+    return Response({"message": "Product removed"}, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def product__action__view(request, *args, **kwargs):
+    '''
+    id is required.
+    Action options are: like, unlike
+    '''
+    serializer = ProductActionSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        product_id = data.get("id")
+        action = data.get("action")
+        content = data.get("content")
+        qs = Product.objects.filter(id=product_id)
+        if not qs.exists():
+            return Response({}, status=404)
+        obj = qs.first()
+        if action == "like":
+            obj.likes.add(request.user)
+            serializer = ProductSerializer(obj)
+            return Response(serializer.data, status=200)
+        elif action == "unlike":
+            obj.likes.remove(request.user)
+            serializer = ProductSerializer(obj)
+            return Response(serializer.data, status=200)
+
+    return Response({"message": "Product liked"}, status=200)
+
 
 @staff_member_required   # Can use this @staff_member_required to select permissions
 def product__create__view_pure_django(request, *args, **kwargs):
@@ -127,7 +198,7 @@ def product__create__view_pure_django(request, *args, **kwargs):
         
     return render(request, "forms.html", {"form": form})
 
-def product__list__view(request, *args, **kwargs):
+def product__list__view_pure_django(request, *args, **kwargs):
     qs = Product.objects.all()
     context = {"object_list": qs}
     return render(request, "products/list.html", context)

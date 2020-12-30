@@ -10,6 +10,11 @@ User = settings.AUTH_USER_MODEL
 #         return ProtectedStorage()
 #     return LiveProtectedStorage
 
+class ProductLike(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    product = models.ForeignKey("Product", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 class Product(models.Model):
     #id = models.AutoField()
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -25,6 +30,8 @@ class Product(models.Model):
     can_backorder = models.BooleanField(default=False)
     requires_shipping = models.BooleanField(default=False)
     is_digital = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='product_user', blank=True, through=ProductLike)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     # @property
     # def requires_shipping(self):

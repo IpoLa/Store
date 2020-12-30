@@ -5,4 +5,35 @@
 
 <h1>Hello world to home {{name}}</h1>
 
-{% endblock %}
+<!-- product form in home page -->
+<div class="row" id="products">
+    Loading ...
+</div>
+<script>
+  
+  const productsContainerElement = document.getElementById("products");
+
+  function loadproducts(productsElement) {
+    const xhr = new XMLHttpRequest();
+    const method = 'GET'
+    const url = "http://127.0.0.1:8000/products/"
+    const responseType = "json"
+
+    xhr.responseType = responseType
+    xhr.open(method, url)
+    xhr.onload = function() {
+      const serverResponse = xhr.response
+      const listedItems = serverResponse
+      var finalproductStr = ""
+      var i;
+      for (i=0; i<listedItems.length; i++) {
+      productsElement.innerHTML = finalproductStr
+    }
+    xhr.send()
+  }
+  loadproducts(productsContainerElement)
+  }
+  </script>
+
+
+{% endblock content %}

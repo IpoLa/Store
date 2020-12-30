@@ -139,7 +139,23 @@ MEDIA_ROOT = BASE_DIR / "cdn" / "media"    # File Field Upload By Default
 
 PROTECTED_MEDIA = BASE_DIR / "cdn" / "protected"
 
+DEFAULT_RENDERER_CLASSES = [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+
 if DEBUG:
     STATIC_ROOT.mkdir(parents=True, exist_ok=True)
     MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
     PROTECTED_MEDIA.mkdir(parents=True, exist_ok=True)
+    DEFAULT_RENDERER_CLASSES += [
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
+}
+
+PRODUCT_ACTION_OPTIONS = ["like", "unlike"]
